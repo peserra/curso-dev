@@ -1,5 +1,41 @@
 # clone-tabnews
 
+## Dependências (npm)
+
+Os pacotes usados pelo projeto são registrados no `package.json`, e o `package-lock.json` guarda as versões instaladas. Para encontrar um pacote, pesquise pelo nome em [npmjs.com](https://www.npmjs.com/).
+
+Para adicionar um pacote usado pela aplicação:
+
+```bash
+npm install nome-do-pacote
+```
+
+Por exemplo, para adicionar o `axios`:
+
+```bash
+npm install axios
+```
+
+Este projeto usa `next`, `react` e `react-dom`. Para adicionar esses pacotes juntos:
+
+```bash
+npm install next react react-dom
+```
+
+Para adicionar uma ferramenta usada apenas durante o desenvolvimento, como formatadores ou ferramentas de teste:
+
+```bash
+npm install --save-dev nome-do-pacote
+```
+
+`--save-dev` também pode ser escrito como `-D`. O npm registra esses pacotes em `devDependencies` no `package.json`.
+
+Depois de clonar o projeto, instale os pacotes já registrados nele com:
+
+```bash
+npm install
+```
+
 ## Git
 
 - Cada commit gera um novo apontamento para a versao mais atual do arquivo, com um identificador hash SHA1 do conteudo dele
