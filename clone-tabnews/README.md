@@ -111,3 +111,6 @@ para os servidores na internet.
 #### Como dar um deploy
 
 ###### Vercel
+Host do site. utilizar, precisa abrir conta, configurar para ler o repositorio do github e ele faz o deploy sempre
+que algo é 'push'
+
