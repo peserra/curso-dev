@@ -1,116 +1,159 @@
 # clone-tabnews
 
-## Dependências (npm)
+Projeto de estudo para reproduzir o TabNews e praticar desenvolvimento web. Este README é um guia para lembrar o que foi configurado, como trabalhar no projeto e por que cada escolha foi feita.
 
-Os pacotes usados pelo projeto são registrados no `package.json`, e o `package-lock.json` guarda as versões instaladas. Para encontrar um pacote, pesquise pelo nome em [npmjs.com](https://www.npmjs.com/).
+## Começar a desenvolver
 
-Para adicionar um pacote usado pela aplicação:
+O projeto usa Node.js, npm, Next.js e React. Para instalar as dependências e iniciar o servidor local:
+
+```bash
+npm install
+npm run dev
+```
+
+O Next.js inicia o site localmente e atualiza a página durante o desenvolvimento. A rota inicial está em `pages/index.js`.
+
+### Node.js
+
+O arquivo `.nvmrc` registra `lts/krypton`, para que o [nvm](https://github.com/nvm-sh/nvm) possa selecionar a versão LTS de Node.js do projeto:
+
+```bash
+nvm install
+nvm use
+```
+
+Isso ajuda a manter a mesma versão do Node entre máquinas. Se não uso nvm, preciso instalar uma versão compatível manualmente.
+
+## Dependências npm
+
+As dependências usadas pela aplicação ficam em `dependencies` no `package.json`. As ferramentas usadas só durante o desenvolvimento ficam em `devDependencies`. O `package-lock.json` registra a árvore e as versões resolvidas para que as instalações sejam reproduzíveis. Os dois arquivos devem ser mantidos no Git.
+
+Dependências atuais da aplicação:
+
+- `next`: framework da aplicação web, incluindo o servidor de desenvolvimento e o sistema de rotas baseado na pasta `pages`.
+- `react` e `react-dom`: criação e renderização da interface React.
+- `prettier` (desenvolvimento): formatação consistente do código e dos arquivos do projeto.
+
+Para adicionar uma dependência usada pela aplicação:
 
 ```bash
 npm install nome-do-pacote
 ```
 
-Por exemplo, para adicionar o `axios`:
-
-```bash
-npm install axios
-```
-
-Este projeto usa `next`, `react` e `react-dom`. Para adicionar esses pacotes juntos:
-
-```bash
-npm install next react react-dom
-```
-
-Para adicionar uma ferramenta usada apenas durante o desenvolvimento, como formatadores ou ferramentas de teste:
+Para adicionar uma ferramenta de desenvolvimento, como um formatador ou ferramenta de teste:
 
 ```bash
 npm install --save-dev nome-do-pacote
 ```
 
-`--save-dev` também pode ser escrito como `-D`. O npm registra esses pacotes em `devDependencies` no `package.json`.
-
-Depois de clonar o projeto, instale os pacotes já registrados nele com:
+`--save-dev` também pode ser escrito como `-D`. O npm atualiza `package.json` e `package-lock.json`; não é necessário editar o lockfile manualmente. Para instalar o que já está registrado depois de clonar:
 
 ```bash
 npm install
 ```
 
-## Git
+## Scripts do projeto
 
-- Cada commit gera um novo apontamento para a versao mais atual do arquivo, com um identificador hash SHA1 do conteudo dele
-- comando para ver commits:
+Os comandos abaixo estão definidos em `scripts` no `package.json`:
 
-```bash
-    git log
-```
+| Comando              | O que faz                           | Por que usar                                                           |
+| -------------------- | ----------------------------------- | ---------------------------------------------------------------------- |
+| `npm run dev`        | Inicia o servidor local do Next.js. | Desenvolver e conferir o site no navegador.                            |
+| `npm run lint:check` | Executa `prettier --check .`.       | Verifica se os arquivos estão formatados sem alterá-los.               |
+| `npm run lint:fix`   | Executa `prettier --write .`.       | Formata os arquivos compatíveis antes de revisar ou commitar mudanças. |
 
-- git nao armazena diff, ele calcula sob demanda, joga um blob sobre outro e compara
-
-### Status do controle de versão
-
-```bash
-    git status
-```
-
-- **Untracked:** Arquivo nunca foi adicionado ao git.
-- **Modified:** Arquivo ja estava no repositorio é alterado.
+O Prettier foi instalado como dependência de desenvolvimento porque só é necessário para trabalhar no código, não para executar a aplicação em produção. Os scripts deixam a verificação e a formatação fáceis de repetir. Depois de editar, posso executar:
 
 ```bash
-    git add
+npm run lint:check
 ```
 
-- **Stageded:** Este arquivo esta pronto para commit.
+Se houver arquivos para formatar:
 
 ```bash
-    git commit -m "message"
+npm run lint:fix
 ```
 
-- **Commited:** Arquivo sofre o commit.
+## Organização das páginas
 
-- caso eu queira alterar um commit:
+O Next.js usa a pasta `pages` para criar rotas. A convenção está anotada em `pages/README.md`:
+
+| Arquivo                    | Rota               |
+| -------------------------- | ------------------ |
+| `pages/index.js`           | `/`                |
+| `pages/produtos/index.js`  | `/produtos`        |
+| `pages/recuperar-senha.js` | `/recuperar-senha` |
+
+`pages/index.js` exporta o componente React `Home`, que por enquanto mostra uma mensagem de exemplo. Novas páginas devem seguir a convenção de nomes e exportar o componente correspondente.
+
+## Consistência do editor
+
+`.editorconfig` é a configuração compartilhada pelos editores: usa espaços e indentação de dois caracteres. Isso reduz diferenças de formatação quando o projeto é aberto em editores diferentes. O Prettier complementa essa configuração ao formatar os arquivos.
+
+## Arquivos ignorados pelo Git
+
+O `.gitignore` lista `.next` (arquivos gerados pelo Next.js) e `node_modules` (pacotes instalados localmente). Esses diretórios podem ser recriados e não precisam ser enviados a cada mudança.
+
+**Atenção para este repositório:** `node_modules` foi adicionado ao Git antes da criação do `.gitignore`. O Git continua rastreando arquivos que já estavam versionados; adicioná-los ao `.gitignore` não os remove do histórico nem do índice. Para parar de rastrear a pasta sem apagar a cópia local, executar a partir de `clone-tabnews`:
 
 ```bash
-    git commit --amend -m "message"
+git rm -r --cached node_modules
 ```
 
-ele emenda com o ultimo commit e altera (o commit anterior deixa de existir)
+Depois, revisar e commitar essa remoção. A regra existente no `.gitignore` evita que os arquivos voltem a ser adicionados.
 
-### Git ignore
+## Git: fluxo de trabalho
 
-- Usado para ignorar pastas e arquivos que nao queremos versionamento
+O repositório Git está na pasta que contém `clone-tabnews`. Posso executar os comandos Git dentro da pasta do projeto; para ver o estado de tudo que está no repositório, também posso usar `git status`.
 
-## Deploy
+1. Conferir os arquivos alterados antes de preparar o commit:
 
-### Server e Client
+   ```bash
+   git status
+   git diff
+   ```
 
-Depois de fazer mudanças locais e jogar no origin remoto, precisamos fazer um deploy,
-cada nova mudança é um novo deploy que atualiza o server
+2. Adicionar as mudanças que quero incluir e conferir o que ficou preparado:
 
-arquitetura client/server
-client: pede
-servidor : entrega
+   ```bash
+   git add README.md package.json package-lock.json pages
+   git diff --staged
+   ```
 
-um server pode ter multiplos clients e conversar com multiplos servicos, basta que se respeitem
-os protocolos
+   Posso acrescentar outros caminhos ao `git add` ou usar `git add -A` para preparar todas as mudanças do repositório. Conferir o status evita incluir alterações por engano.
 
-um server intermediario é chamado de proxy
+3. Criar um commit com uma mensagem que resuma a mudança:
 
-### Hospedagem e deploy
+   ```bash
+   git commit -m "documenta configuracao do projeto"
+   ```
 
-Ao inves de mandar do pc pessoal para o servidor, por que não editar no ambiente de produção?
+4. Enviar o commit para a branch principal no remoto `origin`:
 
-Windows server no windows ou SSH no linux, para conectar direto com o server
+   ```bash
+   git push origin main
+   ```
 
-ambiente local e remoto podiam ser diferentes, e muitas vezes tinham problemas
+`git status` mostra arquivos _untracked_ (ainda não rastreados), _modified_ (alterados) e _staged_ (preparados para o próximo commit). `git log --oneline` lista o histórico de commits. Um commit identifica uma versão do projeto; o Git compara versões a partir de seus objetos, em vez de guardar um diff simples por arquivo como fonte primária.
 
-hoje em dia, desenvolve se localmente, manda para um C.I (continuous integrator) que testa
-as mudanças. Se nada quebrou, envia para outra maquina que vai fazer o Build, enviando
-para os servidores na internet.
+`git commit --amend -m "nova mensagem"` substitui o commit mais recente, incluindo alterações preparadas. Como isso reescreve o histórico, usar apenas antes de compartilhar o commit; um commit já enviado exige cuidado extra para sincronizar o remoto.
 
-#### Como dar um deploy
+## Deploy: anotações e próximos passos
 
-###### Vercel
-Host do site. utilizar, precisa abrir conta, configurar para ler o repositorio do github e ele faz o deploy sempre
-que algo é 'push'
+O navegador atua como _client_: faz solicitações. O servidor recebe essas solicitações e devolve respostas; ele também pode conversar com outros serviços seguindo protocolos. Um servidor que encaminha solicitações entre cliente e outros servidores pode atuar como _proxy_.
 
+Desenvolver localmente ajuda a manter o ambiente de desenvolvimento separado do de produção. Em um fluxo de CI/CD, as mudanças podem ser testadas e compiladas antes de serem publicadas. CI significa _continuous integration_; CD significa _continuous delivery_ ou _continuous deployment_.
+
+A ideia anotada para hospedar este projeto é usar a Vercel: criar uma conta, conectar o repositório GitHub e configurar o projeto Next.js. Com essa integração configurada, um `git push` pode iniciar um novo deploy automaticamente. As notas neste README registram o plano; a integração em si depende de configurar o projeto na Vercel.
+
+## Histórico do que foi montado
+
+- Foi iniciado o repositório e criado este guia para guardar notas de desenvolvimento, Git e deploy.
+- O projeto foi colocado em `clone-tabnews` e `.nvmrc` foi adicionado para registrar a versão LTS de Node.js usada durante o curso.
+- Foram adicionados Next.js, React e React DOM, junto com o `package-lock.json`, para criar e executar a aplicação.
+- Foi criada a pasta `pages` e sua documentação de rotas. `pages/index.js` passou a exportar a página inicial de exemplo.
+- Foi adicionado `.gitignore` para ignorar a saída do Next.js e as dependências locais; ver a observação acima sobre `node_modules` que já era rastreado.
+- Foi adicionado `.editorconfig` para padronizar indentação com espaços e largura de dois caracteres.
+- Foi instalado Prettier em `devDependencies` e adicionados `lint:check` e `lint:fix` ao `package.json` para verificar e corrigir a formatação.
+
+Ao mudar uma dessas configurações no futuro, atualizar este guia com o que mudou, o motivo e o comando necessário para reproduzir a configuração.

@@ -9,4 +9,3 @@ Exemplo:
 pages/produtos/index.js --> site.com/produtos
 pages/index.js --> site.com/
 pages/recuperar-senha.js --> site.com/recuperar-senha
-
