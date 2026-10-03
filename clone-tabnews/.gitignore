@@ -1,2 +1,29 @@
-.next
+# dependencies
 node_modules
+
+# next.js
+.next
+out
+next-env.d.ts
+
+# typescript
+*.tsbuildinfo
+
+# vercel
+.vercel
+
+# env files (segredos locais)
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# testes
+coverage
+
+# sistema e editores
+.DS_Store
+.idea
