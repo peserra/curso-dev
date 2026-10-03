@@ -92,7 +92,18 @@ O Next.js usa a pasta `pages` para criar rotas. A convenção está anotada em `
 
 ## Arquivos ignorados pelo Git
 
-O `.gitignore` lista `.next` (arquivos gerados pelo Next.js) e `node_modules` (pacotes instalados localmente). Esses diretórios podem ser recriados e não precisam ser enviados a cada mudança.
+O `.gitignore` lista o que pode ser recriado ou não deve ser compartilhado:
+
+- `node_modules`: pacotes instalados localmente (`npm install` recria).
+- `.next`, `out`: saída gerada pelo Next.js.
+- `next-env.d.ts`: tipos gerados pelo Next.js; ele recria o arquivo ao rodar `npm run dev` ou `next build`.
+- `*.tsbuildinfo`: cache incremental do TypeScript.
+- `.vercel`: vínculo local com o projeto na Vercel.
+- `.env`, `.env.*` (exceto `.env.example`): variáveis e segredos locais, que nunca devem ir para o Git.
+- `*.log`, `npm-debug.log*`, `coverage`: logs e relatórios de teste.
+- `.DS_Store`, `.idea`: arquivos do macOS e do editor.
+
+Uso `!.env.example` para poder versionar um exemplo sem valores reais.
 
 **Atenção para este repositório:** `node_modules` foi adicionado ao Git antes da criação do `.gitignore`. O Git continua rastreando arquivos que já estavam versionados; adicioná-los ao `.gitignore` não os remove do histórico nem do índice. Para parar de rastrear a pasta sem apagar a cópia local, executar a partir de `clone-tabnews`:
 
@@ -155,5 +166,7 @@ A ideia anotada para hospedar este projeto é usar a Vercel: criar uma conta, co
 - Foi adicionado `.gitignore` para ignorar a saída do Next.js e as dependências locais; ver a observação acima sobre `node_modules` que já era rastreado.
 - Foi adicionado `.editorconfig` para padronizar indentação com espaços e largura de dois caracteres.
 - Foi instalado Prettier em `devDependencies` e adicionados `lint:check` e `lint:fix` ao `package.json` para verificar e corrigir a formatação.
+
+- O `.gitignore` foi ampliado com `next-env.d.ts`, `*.tsbuildinfo`, `.env*`, `.vercel`, logs, `coverage`, `.DS_Store` e `.idea`.
 
 Ao mudar uma dessas configurações no futuro, atualizar este guia com o que mudou, o motivo e o comando necessário para reproduzir a configuração.
