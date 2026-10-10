@@ -1,2 +1,17 @@
-.next
+# dependencies
 node_modules
+
+# next.js
+.next
+out
+
+# env
+.env*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
